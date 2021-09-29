@@ -1,20 +1,20 @@
 ---
-title: "Statistic learning project"
+  title: "Statistic learning project"
 author: "Based on book A Introduction to Statistical Leaning"
 output: html_document
 runtime: shiny
 ---
 
-----------
-![](doc/isl-cover.jpg_)
+  ----------
+  ![](doc/isl-cover.jpg_)
 ------------
 
 
 
 
-### Goal
+  ### Goal
 
-You can embed Shiny inputs and outputs in your document. Outputs are automatically updated whenever inputs change.  This demonstrates how a standard R plot can be made interactive by wrapping it in the Shiny `renderPlot` function. The `selectInput` and `sliderInput` functions create the input widgets used to drive the plot.
+  You can embed Shiny inputs and outputs in your document. Outputs are automatically updated whenever inputs change.  This demonstrates how a standard R plot can be made interactive by wrapping it in the Shiny `renderPlot` function. The `selectInput` and `sliderInput` functions create the input widgets used to drive the plot.
 
 To learn more, see [Interactive Documents](http://rmarkdown.rstudio.com/authoring_shiny.html).
 
@@ -31,11 +31,11 @@ To learn more, see [Interactive Documents](http://rmarkdown.rstudio.com/authorin
 ##### [Chapter 10  - Unsupervised Learning](www.google.com)
 
 ---
-### References:
-James, G., Witten, D., Hastie, T., Tibshirani, R. (2021). An Introduction to Statistical Learning with Applications in R (2° Edition), Springer Science+Business Media, New York. https://www.statlearning.com/
+  ### References:
+  James, G., Witten, D., Hastie, T., Tibshirani, R. (2021). An Introduction to Statistical Learning with Applications in R (2° Edition), Springer Science+Business Media, New York. https://www.statlearning.com/
 
-Source Code: 
-https://www.statlearning.com/resources-second-edition
+  Source Code:
+  https://www.statlearning.com/resources-second-edition
 
 KNN concept
 https://www.youtube.com/watch?v=UqYde-LULfs
