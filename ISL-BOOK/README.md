@@ -1,13 +1,11 @@
----
-  title: "Statistic learning project"
-author: "Based on book A Introduction to Statistical Leaning"
-output: html_document
-runtime: shiny
----
+### "Statistic learning project"
+#### "Based on book A Introduction to Statistical Leaning"
 
-  ----------
+-----
+
   ![](doc/isl-cover.jpg_)
-------------
+
+-----
 
 
 
