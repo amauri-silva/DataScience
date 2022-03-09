@@ -26,7 +26,7 @@ import numpy as np
 import argparse
 import os
 import time
-import matplotlib as plt
+import matplotlib.pyplot as plt
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.preprocessing.image import load_img
@@ -41,14 +41,13 @@ labels = []
 # initialize the initial learning rate, number of epochs to train for,
 # and batch size
 INIT_LR = 1e-4 #Coeficiente inicial para calcular do Stochastic Gradient Descendent 1e-4 = 0.0001
-EPOCHS = 20 #Quantidade de treinamento da rede neural para
+EPOCHS = 10 #Quantidade de treinamento da rede neural para
 BS = 25 #Valor maior que 1 e divisivel pelo tamanho total do dataset
-CLASSES = [0, 1, 2]
 
 
 #Metodos
 def resizeImages(imagePaths, imageSize, data, labels):
-    print('Hello world!')
+    print("[INFO] loading images...")
 
     for imagePath in imagePaths:
         # extract the class label from the filename
@@ -73,13 +72,13 @@ def resizeImages(imagePaths, imageSize, data, labels):
     data = np.array(data, dtype="float32")
     labels = np.array(labels)
 
-    lb = LabelEncoder()
-    labels = lb.fit_transform(labels)
+    #lb = LabelEncoder()
+    #labels = lb.fit_transform(labels)
     #-------------------------------------------------------------------------------------
     # perform one-hot encoding on the labels
-    #lb = LabelBinarizer()
+    lb = LabelBinarizer()
     # transformação binaria das classes em labels binarias (0,1)
-    #labels = lb.fit_transform(labels)
+    labels = lb.fit_transform(labels)
     # cria uma matriz das labels binarias
     labels = to_categorical(labels)
     print("### Categories:  {}".format(labels))
@@ -87,7 +86,6 @@ def resizeImages(imagePaths, imageSize, data, labels):
     #[5059, 5062]
     # https://datascience.stackexchange.com/questions/20199/train-test-split-error-found-input-variables-with-inconsistent-numbers-of-sam
 
-    print('Hello world!')
     # 2 - Separa os dados para treino e test, nesse caso a porcentagem é 80(treino)/20(teste)
     (trainX, testX, trainY, testY) = train_test_split(data, labels,
                                                       test_size=0.20, stratify=labels, random_state=42)
@@ -109,7 +107,7 @@ def resizeImages(imagePaths, imageSize, data, labels):
     headModel = Flatten(name="flatten")(headModel)
     headModel = Dense(128, activation="relu")(headModel)
     headModel = Dropout(0.2)(headModel)
-    headModel = Dense(3, activation="softmax")(headModel)
+    headModel = Dense(2, activation="softmax")(headModel)
 
     # place the head FC model on top of the base model (this will become
     # the actual model we will train)
@@ -187,9 +185,10 @@ if __name__ == '__main__':
 
     imagePaths = list(paths.list_images(PATH_TRAIN))
     imageSize = 224
-    LABELS = ['BACTERIA','NORMAL','VIRAL']
-
+    #LABELS = ['BACTERIA','NORMAL','VIRAL']
+    labels = []
     # Hiperâmetros
 
-    resizeImages(imagePaths, imageSize, data, LABELS)
+
+    resizeImages(imagePaths, imageSize, data, labels)
 
