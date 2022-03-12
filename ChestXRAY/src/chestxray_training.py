@@ -177,7 +177,7 @@ def resizeImages(imagePaths, imageSize, data, labels):
 if __name__ == '__main__':
     # Objetos e constantes
     PATH_TRAIN = "../dataset/chest_xray/treinamento"
-    PATH_VAIDATION = "../dataset/chest_xray/validacao"
+    PATH_VALIDATION = "../dataset/chest_xray/validacao"
     #::: Categorias das imagens
     NORMAL = "NORMAL"
     PNEUMONIA_BACTERIA = "PNEUMONIA_BACTERIA"
