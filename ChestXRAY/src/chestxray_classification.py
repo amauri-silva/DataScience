@@ -18,8 +18,20 @@ import matplotlib.pyplot as plt
 
 model = load_model("chestxray.model")
 #Constantes e variáveis
-#test_images = cv2.imread("../dataset/chest_xray/validacao/BACTERIA/0-BACTERIA.jpeg")
+#::: Categorias das imagens
+NORMAL = "NORMAL"
+PNEUMONIA_BACTERIA = "PNEUMONIA_BACTERIA"
+PNEUMONIA_VIRAL = "PNEUMONIA_VIRAL"
+
 PATH_VALIDATION = "../dataset/chest_xray/validacao/BACTERIA/0-BACTERIA.jpeg"
+#[INFO] computing ChestXRay detections...
+#####:  [0.9960813  0.00391868]
+
+PATH_VALIDATION = "../dataset/chest_xray/validacao/NORMAL/0-NORMAL.jpeg"
+#####:  (1, 224, 224, 3)
+#[INFO] computing ChestXRay detections...
+#####:  [2.6151352e-04 9.9973851e-01]
+
 IMAGE_SIZE = 224
 image = load_img(PATH_VALIDATION,
                  target_size=(IMAGE_SIZE, IMAGE_SIZE))  # Loads an image into PIL format. (PIL it is a Python library)
@@ -30,7 +42,6 @@ print("#####:  {}".format(image.shape))
 
 print("[INFO] computing ChestXRay detections...")
 #probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
-
 
 predictions = model.predict(image)
 #predictions = probability_model.predict(image)
