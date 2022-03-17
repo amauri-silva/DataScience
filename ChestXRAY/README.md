@@ -1,10 +1,8 @@
 
 
-###SEARCH
+### SEARCH
 
-#####Informações pesquisadas
-
-#####Links gerais
+##### Links gerais
 https://towardsdatascience.com/review-resnet-winner-of-ilsvrc-2015-image-classification-localization-detection-e39402bfa5d8
 
 https://www.hindawi.com/journals/mpe/2021/3366057/
@@ -13,10 +11,12 @@ https://www.radiologymasterclass.co.uk/gallery/galleries
 
 https://www.kaggle.com/c/siim-acr-pneumothorax-segmentation/discussion/98498
 
-#####R-CNN
+https://www.tensorflow.org/tutorials/keras/classification#import_the_fashion_mnist_dataset
+
+##### R-CNN
 https://www.tensorflow.org/api_docs/python/tf/keras/applications/resnet/ResNet152
 
-#####GitHub
+##### GitHub
 
 https://github.com/omrifried/RSNA-Chest-X-Ray-Faster-RCNN/blob/main/rsna-pneumonia-faster-rcnn-detection.ipynb
 
