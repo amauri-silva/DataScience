@@ -4,7 +4,5 @@ opencv-python==4.5.5.62
 sklearn==0.0
 Pillow==7.1.2
 tensorflow==2.2.1
-
-
 matplotlib==3.3.2
 pydot==1.4.1
