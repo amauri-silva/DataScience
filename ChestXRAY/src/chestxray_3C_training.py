@@ -14,6 +14,7 @@ from tensorflow.keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
+import seaborn as sb
 import matplotlib.pyplot as plt
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
@@ -21,6 +22,11 @@ from tensorflow.keras.preprocessing.image import load_img
 from imutils import paths
 import numpy as np
 import os
+from sklearn.metrics import confusion_matrix
+
+
+
+
 
 #:::BLOCO-2 ======================================================================================================================
 def dataAugmentatio():
@@ -75,9 +81,22 @@ def plotMetrics(H):
     plt.xlabel("Epoch #")
     plt.ylabel("Loss/Accuracy")
     plt.legend(loc="lower left")
-    plt.savefig("plot.png")
+    plt.savefig("acuracia_final.png")
 
 #:::BLOCO-6 ======================================================================================================================
+def confusionMatrix(testY, predIdxs):
+
+    test_Y = np.argmax(testY, axis=1)
+    cf_matrix = confusion_matrix(test_Y, predIdxs)
+    heat_map = sb.heatmap(cf_matrix, annot=True, cmap="Blues", fmt="d")
+    heat_map.set_title('Matriz de confusão\n');
+    heat_map.set_xlabel('Predição das categorias\n\n')
+    heat_map.xaxis.set_ticklabels(['BACTERIA', 'NORMAL', 'VIRAL'])
+    heat_map.yaxis.set_ticklabels(['BACTERIA', 'NORMAL', 'VIRAL'])
+    plt.savefig("matrix_de_confusao.png")
+
+
+#:::BLOCO-7 ======================================================================================================================
 def training(imagePaths, imageSize, data, labels):
     print("[INFO] Carregando as imagens para processamento ...")
 
@@ -140,7 +159,10 @@ def training(imagePaths, imageSize, data, labels):
 
     # Para cada imagem no set de teste procuramos o index da label no qual contem a maio probabilidade de predição
     predIdxs = np.argmax(predIdxs, axis=1)
-    
+
+    print("[INFO] Gerando a Matrix de confusão")
+    confusionMatrix(testY, predIdxs)
+
     print("[INFO] Exibindo os dados da classificação formatados ...")
     print(classification_report(testY.argmax(axis=1), predIdxs,
                                 target_names=lb.classes_))
@@ -151,7 +173,7 @@ def training(imagePaths, imageSize, data, labels):
     # Plotagem dos dados de treinamento
     plotMetrics(H)
 
-#:::BLOCO-7 ======================================================================================================================
+#:::BLOCO-8 ======================================================================================================================
 if __name__ == '__main__':
 
     # Objetos e constantes
@@ -163,7 +185,7 @@ if __name__ == '__main__':
     # Hiperâmetros
     imageSize = 224
     INIT_LR = 1e-4  # Coeficiente inicial para calcular do Stochastic Gradient Descendent 1e-4 = 0.0001
-    EPOCHS = 10  # Quantidade de treinamento da rede neural
+    EPOCHS = 20  # Quantidade de treinamento da rede neural
     BS = 40  # Valor maior que 1 e divisivel pelo tamanho total do dataset
 
     training(imagePaths, imageSize, data, labels)
