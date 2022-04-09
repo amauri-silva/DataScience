@@ -13,9 +13,21 @@ import config
 import os
 from datetime import datetime
 import time
+import math
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import classification_report
+
 
 def download_dataset_file():
     os.path.join(config.DATA_FRAME_SAVE_PATH, "crypto_dataset")
+
+def create_dataset(dataset, time_step=1):
+    dataX, dataY = [], []
+    for i in range(len(dataset) - time_step - 1):
+        a = dataset[i:(i + time_step), 0]
+    dataX.append(a)
+    dataY.append(dataset[i + time_step, 0])
+    return np.array(dataX), np.array(dataY)
 
 def datetime_to_timestamp(date_time):
     dt_list = []
@@ -75,6 +87,10 @@ def pre_precess_data():
     #datetime = np.array(data_frame['datetime'])
     datetime = datetime_to_timestamp(data_frame['datetime'])
     data_frame['datetime'] = datetime
+    print(type(data_frame))
+
+    #Remove linhas no qual contem valores NA (em uma pré analize foi contabilizada 39 linhas)
+    data_frame = data_frame.dropna()
 
     display(data_frame)
     #open_time = np.array(data_frame[0])
@@ -82,37 +98,84 @@ def pre_precess_data():
 
     #data_frame.drop(columns=['target'])
 
-    mms = MinMaxScaler()
-    stock_data_transf = mms.fit_transform(data_frame)
+    mms = MinMaxScaler(feature_range=(0,1))
+    stock_data_transf = mms.fit_transform(np.array(data_frame).reshape(-1,1))
+    #training_size = int(len(stock_data_transf) * 0.80)
     training_size = round(len(stock_data_transf) * 0.80)
 
     train_data = stock_data_transf[:training_size]
     test_data = stock_data_transf[training_size:]
 
-    #X_train = train_data.drop(columns=['target'])
-    X_train = np.delete(train_data, 9, 0)
-    #y_train = train_data['target']
-    y_train = train_data[9]
+    #INICIO V1.0--------------------------------------------------------------------------------------------------------
+    #X_train = train_data.reshape(train_data.shape[0], train_data.shape[1], 1)
+    #X_test = test_data.reshape(test_data.shape[0], test_data.shape[1], 1)
 
-    #X_test = test_data.drop(columns=['target'])
-    X_test = np.delete(train_data, 9, 0)
-    #y_test = test_data['target']
-    y_test = test_data[9]
 
-    return X_train, y_train, X_test, y_test
+    time_step = 100
+    X_train, y_train = create_dataset(train_data, time_step)
+    X_test, y_test = create_dataset(test_data, time_step)
 
-def traing_model(X_train,y_train, X_test, y_test):
+    X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], 1)
+    X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], 1)
+    #FIM ---------------------------------------------------------------------------------------------------------------
+
+    # #X_train = train_data.drop(columns=['target'])
+    # X_train = np.delete(train_data, 9, 0)
+    # #y_train = train_data['target']
+    # y_train = train_data[9]
+    #
+    # #X_test = test_data.drop(columns=['target'])
+    # X_test = np.delete(train_data, 9, 0)
+    # #y_test = test_data['target']
+    # y_test = test_data[9]
+
+    return X_train, y_train, X_test, y_test, mms
+
+def traing_model(X_train, y_train, X_test, y_test, mms):
     print("[INFO] Treinando o modelo baseado em LSTM ...")
     model = Sequential()
-    model.add(LSTM(units=1000, return_sequences=True, input_shape=(X_train.shape[1], 1)))
-    model.add(LSTM(units=1000))
+    model.add(LSTM(50, return_sequences=True, input_shape=(X_train.shape[1], 1)))
+    model.add(LSTM(50, return_sequences=True))
+    model.add(LSTM(50))
     model.add(Dense(1))
-
     model.compile(loss='mean_squared_error', optimizer='adam')
-    model.fit(X_train, y_train, epochs=1, batch_size=1, verbose=2)
 
+    #INICIO V1.0--------------------------------------------------------------------------------------------------------
+    model.fit(X_train, X_test, epochs=1, batch_size=1, verbose=2)
+    model.summary()
+    # 8 - Treinamento do Modelo (train the head of the network)
+    # print("[INFO] training head...")
+    # model.fit(
+    #     #steps_per_epoch=len(trainX) // BS,
+    #     validation_data=(X_test, y_test),
+    #     validation_steps=len(X_test))
+
+    #FIM ---------------------------------------------------------------------------------------------------------------
+    print("[INFO] Executando a predição do X_train ...")
+    train_predict = model.predict(X_train)
+
+    print("[INFO] Executando a predição do X_test ...")
+    test_predict = model.predict(X_test)
+
+    train_predict = mms.inverse_transform(train_predict)
+    print("[INFO] Executando a predição do train_predict ...")
+
+    test_predict = mms.inverse_transform(test_predict)
+    print("[INFO] Executando a predição do test_predict ...")
+
+    math.sqrt(mean_squared_error(y_train, train_predict))
+
+    # 9 - Executa Testes de Predição
+    print("[INFO] evaluating network...")
+    predIdxs = model.predict(X_test, batch_size=1)
+
+    # show a nicely formatted classification report
+    #print(classification_report(X_test.argmax(axis=1), predIdxs))
+    print("[INFO] printing predIdxs ...")
+    print(predIdxs)
+    # ----------------------------------------------------------------------------------------------------------------------
     # Salvando o modelo em um arquivo pickle para ser utilizado nas etapas seguintes
-    filename = 'model_dummy.pickle'
+    filename = 'finalized_model.sav'
     pickle.dump(model, open(filename, 'wb'))
 
 
@@ -122,6 +185,6 @@ if __name__ == '__main__':
     data_frame = stock_data()
     #display(data_frame)
     #X_train, y_train, X_test, y_test = split_dataset(data_frame)
-    X_train, y_train, X_test, y_test = pre_precess_data()
-    traing_model(X_train, y_train, X_test, y_test)
+    X_train, y_train, X_test, y_test, mms = pre_precess_data()
+    traing_model(X_train, y_train, X_test, y_test, mms)
     # display(train, test)
