@@ -1,2 +1,12 @@
 pyarrow==6.0.1
 statsmodels==0.12.2
+dill==0.3.4
+imutils==0.5.3
+numpy==1.18.0
+opencv-python==4.5.5.62
+sklearn==0.0
+Pillow==7.1.2
+tensorflow==2.2.1
+matplotlib==3.3.2
+pydot==1.4.1
+seaborn==0.11.2
