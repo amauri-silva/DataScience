@@ -65,7 +65,7 @@ def feature_eng(df):
     return df
 	
 def my_robot(tempo, token):
-    model = pickle.load(open('model_dummy.pickle', 'rb'))
+    model = pickle.load(open('model/model_dummy.pickle', 'rb'))
     ticker = 'DOGEUSDT'
     count_iter = 0
     valor_compra_venda = 10
