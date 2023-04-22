@@ -1,13 +1,22 @@
-import operator
-import glob as glb
+
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.preprocessing.image import load_img
+
+import glob as glb
 import numpy as np
+import operator
 from PIL import Image, ImageFont, ImageDraw
 
 def classification(image_path, dir_name):
+    """ This method is responsible to show the style of metrics while the model prediction is running.
+
+    Keyword arguments:
+    image_path -- Full path of wich imagens + name's image.
+    dir_name   -- Dir name where wich classe of image it is.
+    """
+
     IMAGE_SIZE = 224
     image = load_img(image_path,
                      target_size=(
@@ -18,28 +27,32 @@ def classification(image_path, dir_name):
 
     predictions = model.predict(image)
     index = np.argmax(predictions)
-    #max_value = predictions[0][index]
-    #print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$: {}".format(index))
-    #print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$: {}".format(max_value))
-    print("[INFO] Classificando as imagens do diretório: {}".format(dir_name))
+    
+    print("[INFO] Classifying the directory's imagens: {}".format(dir_name))
     if(index == 0):
-        print("::RaioX Analisado: {}".format(dir_name))
-        print("Classificado como: {}".format(LABELS[index]))
-        print(":::::::::Acurácia: %.2f" % predictions[0][index])
+        print("::Analized X-Ray: {}".format(dir_name))
+        print("Classifying as: {}".format(LABELS[index]))
+        print(":::::::::Accuracy: %.2f" % predictions[0][index])
         print("--------------------------------------------------------------------")
     elif(index == 1):
-        print("::RaioX Analisado: {}".format(dir_name))
-        print("Classificado como: {}".format(LABELS[index]))
-        print(":::::::::Acurácia: %.2f" % predictions[0][index])
+        print("::Analized X-Ray: {}".format(dir_name))
+        print("Classifying as: {}".format(LABELS[index]))
+        print(":::::::::Accuracy: %.2f" % predictions[0][index])
         print("--------------------------------------------------------------------")
     else:
-        print("::RaioX Analisado: {}".format(dir_name))
-        print("Classificado como: {}".format(LABELS[index]))
-        print(":::::::::Acurácia: %.2f" % predictions[0][index])
+        print("::Analized X-Ray: {}".format(dir_name))
+        print("Classifying as: {}".format(LABELS[index]))
+        print(":::::::::Accuracy: %.2f" % predictions[0][index])
         print("--------------------------------------------------------------------")
 
 
 def get_images_validation(dir):
+    """ Method that do loop over each class of pneumonia by dictory to validate its imagens.
+
+    Keyword arguments:
+    dir        -- Directory of each pneumonia class.
+    """
+
     path = PATH_VALIDATION + dir + FORMAT
 
     for image in glb.glob(path):
@@ -50,9 +63,10 @@ def get_dir_validation():
         get_images_validation(dir)
 
 if __name__ == '__main__':
-    print("[INFO] Carregando o modelo para realizar a predição ...")
+    print("[INFO] Loaging the model to start the prectidion ...")
     model = load_model("../model/chestxray_3C.model")
-    # Constantes e variáveis
+    
+    # Constants and variables
     PATH_VALIDATION = "../dataset/chest_xray/validacao"
     NORMAL = "NORMAL"
     PNEUMONIA_BACTERIA = "PNEUMONIA_BACTERIA"
@@ -62,7 +76,5 @@ if __name__ == '__main__':
     PATH_VALIDATION = "../dataset/chest_xray/validacao/"
     DIRETORIOS = ['BACTERIA/', 'NORMAL/', 'VIRAL/']
     FORMAT = "*.jpeg"
-
-    # PATH_VALIDATION = "../dataset/chest_xray/validacao/BACTERIA/0-BACTERIA.jpeg"
 
     get_dir_validation()

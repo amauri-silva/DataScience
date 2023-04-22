@@ -1,19 +1,25 @@
 
-#Used to manipulate paths's files (load files)
+#Used to make a basic image processing functions
 imutils==0.5.3
 
 #Used to manipulate Arrays and matrix
-numpy==1.18.0
+numpy==1.24.3
 
-#opencv-python==4.5.5.62
-#sklearn==0.0
-#Pillow==7.1.2
+opencv-python==4.5.5.62
+
+#A machine learning library for features such as regrassion, clustering, etc
+sklearn==0.0
+
+
+Pillow==7.1.2
 
 #Used as core Framework
-tensorflow==2.2.1
+tensorflow==2.9.3
 
 #Lib used to plot a few graphs
 matplotlib==3.3.2
 
-#pydot==1.4.1
-#seaborn==0.11.2
+pydot==1.4.1
+
+#Used to create the Confusion Matrix plot
+seaborn==0.11.2
