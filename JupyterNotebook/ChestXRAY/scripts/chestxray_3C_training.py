@@ -1,18 +1,14 @@
-
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.applications import MobileNetV2
-from tensorflow.keras.layers import AveragePooling2D
-from tensorflow.keras.layers import Dropout
-from tensorflow.keras.layers import Flatten
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.layers import Input
-from tensorflow.keras.models import Model
-from tensorflow.keras.utils import plot_model
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
-from tensorflow.keras.preprocessing.image import img_to_array
-from tensorflow.keras.preprocessing.image import load_img
+from keras.applications import MobileNetV2
+from keras.applications.densenet import preprocess_input
+from keras.optimizers import Adam
+from keras.preprocessing.image import ImageDataGenerator
+from keras.utils import load_img, img_to_array, to_categorical, plot_model
+from keras.layers import AveragePooling2D
+from keras.layers import Dropout
+from keras.layers import Flatten
+from keras.layers import Dense
+from keras.layers import Input
+from keras.models import Model
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
@@ -24,8 +20,6 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sb
-
-
 def dataAugmentatio():
     """ Method responsable for difine the dataAugmentation properties.
     """
@@ -39,7 +33,6 @@ def dataAugmentatio():
         horizontal_flip=True,
         fill_mode="nearest")
     return aug
-
 def baseModelArc():
     """ Method responsible for create the core architecture of the network and its parameters.
     """
@@ -59,7 +52,6 @@ def baseModelArc():
     model = Model(inputs=baseModel.input, outputs=headModel)
 
     return model, baseModel
-
 def trainingModel(aug, model, trainX, trainY, testX, testY):
     """ Method where the model is training and where the hyperparameters is used.
         
@@ -111,7 +103,7 @@ def confusionMatrix(testY, predIdxs):
     heat_map.set_xlabel('Category predictions\n\n')
     heat_map.xaxis.set_ticklabels(['BACTERIA', 'NORMAL', 'VIRAL'])
     heat_map.yaxis.set_ticklabels(['BACTERIA', 'NORMAL', 'VIRAL'])
-    plt.savefig("matrix_de_confusao.png")
+    plt.savefig("confusion_matrix.png")
 
 def training(imagePaths, imageSize, data, labels):
     """ Main method that execute the training model.
@@ -167,7 +159,7 @@ def training(imagePaths, imageSize, data, labels):
 
     # Model compilation
     print("[INFO] Compiling the model...")
-    opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
+    opt = Adam(learning_rate=INIT_LR, decay=INIT_LR / EPOCHS)
     model.compile(loss="binary_crossentropy", optimizer=opt,
                   metrics=["accuracy"])
 
@@ -200,7 +192,7 @@ def training(imagePaths, imageSize, data, labels):
 if __name__ == '__main__':
 
     # Object and constants
-    PATH_TRAIN = "../dataset/chest_xray/treinamento"
+    PATH_TRAIN = "../dataset/chest_xray/training"
     imagePaths = list(paths.list_images(PATH_TRAIN))
     data = []
     labels = []

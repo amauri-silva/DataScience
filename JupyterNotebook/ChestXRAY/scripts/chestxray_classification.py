@@ -1,13 +1,14 @@
 
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.image import img_to_array
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
-from tensorflow.keras.preprocessing.image import load_img
-
+from keras.models import load_model
+from keras.utils import img_to_array
+from keras.applications.mobilenet_v2 import preprocess_input
+from keras.utils import load_img
+import os
 import glob as glb
 import numpy as np
 import operator
 from PIL import Image, ImageFont, ImageDraw
+
 
 def classification(image_path, dir_name):
     """ This method is responsible to show the style of metrics while the model prediction is running.
@@ -63,17 +64,18 @@ def get_dir_validation():
         get_images_validation(dir)
 
 if __name__ == '__main__':
+    os.environ['CUDA_VISIBLE_DEVICES'] = "0"
     print("[INFO] Loaging the model to start the prectidion ...")
     model = load_model("../model/chestxray_3C.model")
     
     # Constants and variables
-    PATH_VALIDATION = "../dataset/chest_xray/validacao"
+    PATH_VALIDATION = "../dataset/chest_xray/validation"
     NORMAL = "NORMAL"
     PNEUMONIA_BACTERIA = "PNEUMONIA_BACTERIA"
     PNEUMONIA_VIRAL = "PNEUMONIA_VIRAL"
 
     LABELS = ['BACTERIA', 'NORMAL', 'VIRAL']
-    PATH_VALIDATION = "../dataset/chest_xray/validacao/"
+    PATH_VALIDATION = "../dataset/chest_xray/validation/"
     DIRETORIOS = ['BACTERIA/', 'NORMAL/', 'VIRAL/']
     FORMAT = "*.jpeg"
 

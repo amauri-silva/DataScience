@@ -19,7 +19,9 @@ tensorflow==2.9.3
 #Lib used to plot a few graphs
 matplotlib==3.3.2
 
-pydot==1.4.1
+graphviz==0.20.1
+
+pydot==1.4.2
 
 #Used to create the Confusion Matrix plot
 seaborn==0.11.2
