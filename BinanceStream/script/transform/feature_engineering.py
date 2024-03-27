@@ -41,11 +41,10 @@ def transform_agg_trade(json):
     print(json['data'])
     df = pd.DataFrame.from_dict(json['data'], orient='index')
     df_t = df.transpose()
-    df2 = df_t.rename(columns=constants.COLUNMS_NAME_AGG_TRAGE)
+    df2 = df_t.rename(columns=constants.COLUNMS_NAME_AGG_TRADE)
     
     # my_dict = df2.to_dict()
     # #my_dict2 = [my_dict[0]]
-    # print("back againnnnnnnnnnnnnnnnnnnnnnnnnnn")
     # df_evt_time = event_time_df(df2['event_time'])
     # df_trd_time = trade_time_df(df2['trade_time'])
     # print(type(my_dict))
@@ -53,4 +52,48 @@ def transform_agg_trade(json):
     # df2.append(df_evt_time, ignore_index=True)
     # df2.append(df_trd_time, ignore_index=True)
     # my_dict.append(df_evt_time)
+    # print("back againnnnnnnnnnnnnnnnnnnnnnnnnnn")
     store_data.agg_trade_csv(df2)
+
+
+def transform_trade(json):
+    print(json['data'])
+    df = pd.DataFrame.from_dict(json['data'], orient='index')
+    df_t = df.transpose()
+    df2 = df_t.rename(columns=constants.CONLUMS_NAME_TRADE)
+
+    store_data.trade_csv(df2)
+
+
+def transform_avg_price(json):
+    print(json['data'])
+    df = pd.DataFrame.from_dict(json['data'], orient='index')
+    df_t = df.transpose()
+    df2 = df_t.rename(columns=constants.CONLUMS_NAME_AVG_PRICE)
+
+    store_data.avg_price_csv(df2)
+
+def transform_book_ticker(json):
+    print(json['data'])
+    df = pd.DataFrame.from_dict(json['data'], orient='index')
+    df_t = df.transpose()
+    df2 = df_t.rename(columns=constants.CONLUMS_NAME_BOOK_TICKER)
+
+    store_data.book_ticker_csv(df2)
+
+def transform_kline_interval(json):
+    print(json['data']['k'])
+    df = pd.DataFrame.from_dict(json['data']['k'], orient='index')
+    df_t = df.transpose()
+    df2 = df_t.rename(columns=constants.CONLUMS_NAME_KLINE_INTERVAL)
+
+    store_data.kline_interval_csv(df2)
+
+
+def transform_ticker_window(json):
+    print(json['data'])
+    df = pd.DataFrame.from_dict(json['data'], orient='index')
+    df_t = df.transpose()
+    df2 = df_t.rename(columns=constants.CONLUMS_NAME_TICKER_WINDOW)
+
+    store_data.ticker_window_csv(df2)
